@@ -1,0 +1,13 @@
+Resources:
+  Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      Timeout: 300
+      MemorySize: 128
+      Handler: nl.capgemini.festival.function.Find
+      CodeUri: s3://festival-find-function/7c479d9ea7d598b2923455776fceba89
+      Runtime: java11
+      Architectures:
+      - x86_64
+    Metadata:
+      SamResourceId: Function
