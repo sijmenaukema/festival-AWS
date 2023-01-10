@@ -17,7 +17,7 @@ public class Get implements RequestHandler<Object, String> {
     public String handleRequest(Object input, Context context) {
         String bucketName = "festival-data-2023";
         String outputString;
-        String key = (input == null) ? "\\*.txt" : input.toString();
+        String key = input.toString();
 
         context.getLogger().log("Input: " + input);
 
