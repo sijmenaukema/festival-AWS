@@ -1,1 +1,7 @@
 /FestivalFunctions/.aws-sam/
+/.idea/*
+/target/*
+.DS_Store
+*.iml
+target/
+/data/

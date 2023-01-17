@@ -7,29 +7,31 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.google.gson.Gson;
 import software.amazon.awssdk.services.dynamodb.model.DynamoDbException;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 
-import nl.capgemini.festival.model.DiscJockey;
 import nl.capgemini.festival.config.DiscJockeyDynamoDBClient;
+import nl.capgemini.festival.model.DiscJockey;
 
-public class DiscJockeyGet extends DiscJockeyDynamoDBClient implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+public class DiscJockeyGetAll extends DiscJockeyDynamoDBClient implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
-    public DiscJockeyGet() {
+    public DiscJockeyGetAll() {
         super();
     }
 
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request, Context context) {
-        String keyValue = request.getQueryStringParameters().get("id");
-
+        ArrayList<DiscJockey> discJockeysList = new ArrayList<>();
         try {
-            DiscJockey discJockey = getItemFromDynamo(keyValue);
+            Iterator<DiscJockey> responseItem = getAllItemsFromDynamo();
+            responseItem.forEachRemaining(discJockeysList :: add);
             Gson gson = new Gson();
-            if( discJockey!=null ) {
+            if( discJockeysList.size() != 0 ) {
                 return new APIGatewayProxyResponseEvent()
                         .withStatusCode(200)
                         .withHeaders(Collections.emptyMap())
-                        .withBody(gson.toJson(discJockey));
+                        .withBody(gson.toJson(discJockeysList));
             }
         } catch (DynamoDbException e) {
             System.err.println(e.getMessage());

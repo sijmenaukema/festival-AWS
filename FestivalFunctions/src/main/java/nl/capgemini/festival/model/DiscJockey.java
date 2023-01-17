@@ -1,28 +1,32 @@
 package nl.capgemini.festival.model;
 
-import com.google.gson.annotations.SerializedName;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortKey;
 
+@DynamoDbBean
 public class DiscJockey {
 
-    @SerializedName("id")
-    private long id;
-
-    @SerializedName("name")
+    private String id;
     private String name;
-
-    @SerializedName("genre")
     private String genre;
 
-    public DiscJockey(){}
+    @DynamoDbPartitionKey
+    public String getId() {return id; }
+    public void setId(String id) {this.id = id; }
 
-    public DiscJockey(long id){
-        this.id = id;
-    }
-
-    public Long getId() {return id; }
+    @DynamoDbSortKey
     public String getName() { return name; }
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getGenre() { return genre; }
     public void setGenre(String genre) { this.genre = genre; }
+
+    public DiscJockey(){}
+
+    public DiscJockey(String name) {}
+
+    public DiscJockey(String name, String genre){}
 }
