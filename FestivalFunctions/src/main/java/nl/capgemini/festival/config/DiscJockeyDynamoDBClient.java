@@ -54,7 +54,7 @@ public class DiscJockeyDynamoDBClient {
         return null;
     }
 
-    public PutItemEnhancedResponse<DiscJockey> putItemInDynamo(DiscJockey discJockey) {
+    public PutItemEnhancedResponse putItemInDynamo(DiscJockey discJockey) {
         DynamoDbTable<DiscJockey> djTable = getDynamoDbTable();
         PutItemEnhancedRequest request = PutItemEnhancedRequest.builder(DiscJockey.class)
                 .item(discJockey)
@@ -70,8 +70,8 @@ public class DiscJockeyDynamoDBClient {
                 .build();
 
         DeleteItemEnhancedRequest request= DeleteItemEnhancedRequest.builder()
-                        .key(key)
-                        .build();
+                .key(key)
+                .build();
 
         return djTable.deleteItemWithResponse(request);
     }

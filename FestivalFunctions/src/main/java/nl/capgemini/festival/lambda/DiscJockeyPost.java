@@ -27,10 +27,11 @@ public class DiscJockeyPost extends DiscJockeyDynamoDBClient implements RequestH
         UUID uuid = UUID.randomUUID();
         discJockey.setId(String.valueOf(uuid));
         try {
-            PutItemEnhancedResponse<DiscJockey> response = putItemInDynamo(discJockey);
+            PutItemEnhancedResponse response = putItemInDynamo(discJockey);
             return new APIGatewayProxyResponseEvent()
+                    .withStatusCode(200)
                     .withHeaders(Collections.emptyMap())
-                    .withBody(gson.toJson(response.attributes()));
+                    .withBody(gson.toJson(discJockey));
         } catch (DynamoDbException e) {
             System.err.format(e.getMessage());
             System.exit(1);
