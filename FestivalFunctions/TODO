@@ -1,0 +1,27 @@
+* get all by name
+* consider review service functionality
+    bucket for review
+    id == uuid
+
+* Host angular in amplify
+    solve bad request return json
+    musicset
+
+* test => mock
+
+--------------------------------------------------*
+
+Setup account
+create lambda request handler
+    create dynamoDB or S3 bucket,
+    put "Hello world",
+
+Setup test !!!!
+
+    create put/post, delete, get(all) lambda,
+
+create review service bucket (or rds AWS),
+
+host angular in amplify,
+    refactor front-end to correct URL,
+
