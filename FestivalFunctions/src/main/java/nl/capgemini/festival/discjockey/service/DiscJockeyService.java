@@ -13,9 +13,9 @@ import software.amazon.awssdk.services.dynamodb.model.DynamoDbException;
 import java.util.Iterator;
 
 import nl.capgemini.festival.model.DiscJockey;
-import static nl.capgemini.festival.config.DynamoDBClient.getDynamoDBClient;
+import nl.capgemini.festival.config.DynamoDBClient;
 
-public class DiscJockeyService {
+public class DiscJockeyService extends DynamoDBClient {
 
     public static DynamoDbTable<DiscJockey> getDynamoDbTable() {
         DynamoDbEnhancedClient enhancedClient = DynamoDbEnhancedClient.builder()

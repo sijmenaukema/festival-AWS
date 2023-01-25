@@ -1,6 +1,5 @@
-package nl.capgemini.festival.musicset.service;
+package nl.capgemini.festival.review.service;
 
-import nl.capgemini.festival.config.DynamoDBClient;
 import software.amazon.awssdk.enhanced.dynamodb.*;
 import software.amazon.awssdk.enhanced.dynamodb.model.*;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
@@ -10,42 +9,34 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import nl.capgemini.festival.model.MusicSet;
+import nl.capgemini.festival.config.DynamoDBClient;
+import nl.capgemini.festival.model.Review;
 
-public class MusicSetService extends DynamoDBClient {
+public class ReviewService extends DynamoDBClient {
 
-    public static DynamoDbTable<MusicSet> getDynamoDbTable() {
+    public static DynamoDbTable<Review> getDynamoDbTable() {
         DynamoDbEnhancedClient enhancedClient = DynamoDbEnhancedClient.builder()
                 .dynamoDbClient(getDynamoDBClient())
                 .build();
 
-        return enhancedClient.table("music_set", TableSchema.fromBean(MusicSet.class));
+        return enhancedClient.table("review", TableSchema.fromBean(Review.class));
     }
 
-    public MusicSet getItemFromDynamo(String keyValue) {
-        DynamoDbTable<MusicSet> msTable = getDynamoDbTable();
-        Key key = Key.builder()
-                .partitionValue(keyValue)
-                .build();
-
-        return  msTable.getItem(key);
-    }
-
-    public Iterator<MusicSet> getKeyItemsFromDynamo(String keyValue) {
+    public Iterator<Review> getKeyItemsFromDynamo(String keyValue) {
         try {
-            DynamoDbTable<MusicSet> msTable = getDynamoDbTable();
+            DynamoDbTable<Review> msTable = getDynamoDbTable();
             AttributeValue attVal = AttributeValue.fromS(keyValue);
             Map<String, AttributeValue> expressionValues = new HashMap<String, AttributeValue>(){{
-                put(":dj_id", attVal);
+                put(":ms_id", attVal);
             }};
             Map<String, String> expressionNames = new HashMap<>(){{
-                put("#i", "disc_jockey_id");
+                put("#i", "music_set_id");
             }};
 
             Expression filterExpression =  Expression.builder()
                     .expressionValues(expressionValues)
                     .expressionNames(expressionNames)
-                    .expression("#i = :dj_id")
+                    .expression("#i = :ms_id")
                     .build();
 
             ScanEnhancedRequest scanRequest = ScanEnhancedRequest.builder()
@@ -60,28 +51,18 @@ public class MusicSetService extends DynamoDBClient {
         return null;
     }
 
-    public Iterator<MusicSet> getAllItemsFromDynamo() {
-        try {
-            DynamoDbTable<MusicSet> msTable = getDynamoDbTable();
-            return msTable.scan().items().iterator();
-        } catch (DynamoDbException e) {
-            System.err.println(e.getMessage());
-            System.exit(1);
-        }
-        return null;
-    }
 
-    public PutItemEnhancedResponse putItemInDynamo(MusicSet musicSet) {
-        DynamoDbTable<MusicSet> msTable = getDynamoDbTable();
-        PutItemEnhancedRequest request = PutItemEnhancedRequest.builder(MusicSet.class)
-                .item(musicSet)
+    public PutItemEnhancedResponse putItemInDynamo(Review review) {
+        DynamoDbTable<Review> msTable = getDynamoDbTable();
+        PutItemEnhancedRequest request = PutItemEnhancedRequest.builder(Review.class)
+                .item(review)
                 .build();
 
         return msTable.putItemWithResponse(request);
     }
 
-    public DeleteItemEnhancedResponse<MusicSet> deleteItemFromDynamo(String keyValue) {
-        DynamoDbTable<MusicSet> msTable = getDynamoDbTable();
+    public DeleteItemEnhancedResponse<Review> deleteItemFromDynamo(String keyValue) {
+        DynamoDbTable<Review> msTable = getDynamoDbTable();
         Key key = Key.builder()
                 .partitionValue(keyValue)
                 .build();

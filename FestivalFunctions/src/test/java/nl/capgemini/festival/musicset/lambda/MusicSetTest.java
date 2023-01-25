@@ -1,2 +1,4 @@
-package nl.capgemini.festival.musicset.lambda;public class MusicSetTest {
+package nl.capgemini.festival.musicset.lambda;
+
+public class MusicSetTest {
 }

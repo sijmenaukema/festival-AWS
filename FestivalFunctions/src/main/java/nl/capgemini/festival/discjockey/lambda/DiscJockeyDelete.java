@@ -5,12 +5,11 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.google.gson.Gson;
+import nl.capgemini.festival.discjockey.service.DiscJockeyService;
+import nl.capgemini.festival.model.DiscJockey;
 import software.amazon.awssdk.services.dynamodb.model.DynamoDbException;
 
 import java.util.HashMap;
-
-import nl.capgemini.festival.model.DiscJockey;
-import nl.capgemini.festival.discjockey.service.DiscJockeyService;
 
 public class DiscJockeyDelete extends DiscJockeyService implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
@@ -25,6 +24,7 @@ public class DiscJockeyDelete extends DiscJockeyService implements RequestHandle
         String keyValue = request.getQueryStringParameters().get("id");
         try {
             DiscJockey response = deleteItemFromDynamo(keyValue).attributes();
+            //TODO remove all musicset
             if (response != null) {
                 return getApiGatewayProxyResponseEvent(response, 200);
             }
@@ -36,12 +36,12 @@ public class DiscJockeyDelete extends DiscJockeyService implements RequestHandle
     return getApiGatewayProxyResponseEvent(null, 404);
     }
 
-    private APIGatewayProxyResponseEvent getApiGatewayProxyResponseEvent(DiscJockey response, Integer statusCode) {
+    private APIGatewayProxyResponseEvent getApiGatewayProxyResponseEvent(DiscJockey discJockey, Integer statusCode) {
         return new APIGatewayProxyResponseEvent()
                 .withStatusCode(statusCode)
                 .withHeaders(new HashMap<String, String>() {{
                     put("Access-Control-Allow-Origin", "*");
                 }})
-                .withBody(gson.toJson(response));
+                .withBody(gson.toJson(discJockey));
     }
 }

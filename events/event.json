@@ -1,11 +1,11 @@
 {
-    "body": "{\"message\": \"hello world\"}",
+    "body": "{\"id\": \"42253d33-6c1b-4613-9c3c-3b67ec899a56\",\"name\": \"TESTER1\",\"genre\": \"TEST\"}",
     "resource": "/{proxy+}",
     "path": "/path/to/resource",
     "httpMethod": "POST",
     "isBase64Encoded": false,
     "queryStringParameters": {
-      "foo": "bar"
+      "id": "42253d33-6c1b-4613-9c3c-3b67ec899a56"
     },
     "pathParameters": {
       "proxy": "/path/to/resource"
