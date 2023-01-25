@@ -25,8 +25,4 @@ public class DiscJockey {
     public void setGenre(String genre) { this.genre = genre; }
 
     public DiscJockey(){}
-
-    public DiscJockey(String name) {}
-
-    public DiscJockey(String name, String genre){}
 }

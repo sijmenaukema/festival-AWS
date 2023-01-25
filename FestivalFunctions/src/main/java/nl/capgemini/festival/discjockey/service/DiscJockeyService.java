@@ -1,6 +1,5 @@
-package nl.capgemini.festival.config;
+package nl.capgemini.festival.discjockey.service;
 
-import nl.capgemini.festival.model.DiscJockey;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
 import software.amazon.awssdk.enhanced.dynamodb.Key;
@@ -9,29 +8,21 @@ import software.amazon.awssdk.enhanced.dynamodb.model.DeleteItemEnhancedRequest;
 import software.amazon.awssdk.enhanced.dynamodb.model.DeleteItemEnhancedResponse;
 import software.amazon.awssdk.enhanced.dynamodb.model.PutItemEnhancedRequest;
 import software.amazon.awssdk.enhanced.dynamodb.model.PutItemEnhancedResponse;
-import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.DynamoDbException;
 
 import java.util.Iterator;
 
-public class DiscJockeyDynamoDBClient {
+import nl.capgemini.festival.model.DiscJockey;
+import static nl.capgemini.festival.config.DynamoDBClient.getDynamoDBClient;
 
-    String tableName = "disc_jockey";
+public class DiscJockeyService {
 
-    public DynamoDbClient getDynamoDB() {
-        Region region = Region.EU_WEST_1;
-        return DynamoDbClient.builder()
-                .region(region)
-                .build();
-    }
-
-    public DynamoDbTable<DiscJockey> getDynamoDbTable() {
+    public static DynamoDbTable<DiscJockey> getDynamoDbTable() {
         DynamoDbEnhancedClient enhancedClient = DynamoDbEnhancedClient.builder()
-                .dynamoDbClient(getDynamoDB())
+                .dynamoDbClient(getDynamoDBClient())
                 .build();
 
-        return enhancedClient.table(tableName, TableSchema.fromBean(DiscJockey.class));
+        return enhancedClient.table("disc_jockey", TableSchema.fromBean(DiscJockey.class));
     }
 
     public DiscJockey getItemFromDynamo(String keyValue) {
@@ -63,7 +54,7 @@ public class DiscJockeyDynamoDBClient {
         return djTable.putItemWithResponse(request);
     }
 
-    public DeleteItemEnhancedResponse<DiscJockey> deleteItemFromDynamo(String keyValue, String partitionKeyName) {
+    public DeleteItemEnhancedResponse<DiscJockey> deleteItemFromDynamo(String keyValue) {
         DynamoDbTable<DiscJockey> djTable = getDynamoDbTable();
         Key key = Key.builder()
                 .partitionValue(keyValue)
